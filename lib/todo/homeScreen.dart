@@ -1,7 +1,11 @@
 
+import 'package:asseignment_flutter/login/login_screen.dart';
+import 'package:asseignment_flutter/todo/providers/login_provider.dart';
 import 'package:asseignment_flutter/todo/tabs/home.dart';
 import 'package:asseignment_flutter/todo/tabs/setting.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'bottom_sheet/add_task_bottom_sheet.dart';
 
@@ -19,16 +23,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var pro =Provider.of<LoginProvider>(context);
     return Scaffold(
+      //backgroundColor: Color(0xFFDFECDB),
       extendBody: true,
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: Text(
-          'To Do App',
-          style: TextStyle(
-            color: Colors.white,
-          ),
+          'Hallo ${pro.userModel?.userName}',
         ),
+        actions: [
+          IconButton(onPressed: (){
+            FirebaseAuth.instance.signOut();
+            Navigator.pushNamedAndRemoveUntil(context, LoginScreen.routeName,(route) => false,);
+          }, icon: Icon(Icons.logout,color: Colors.white,))
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
@@ -64,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
           selectedItemColor: Colors.blue,
           showUnselectedLabels: false,
           items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Tasks'),
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Setting'),
           ],
         ),
